@@ -9,7 +9,7 @@ public class BookDbHelper extends SQLiteOpenHelper {
     public static final String LOG_TAG = BookDbHelper.class.getSimpleName();
 
     /** Name of the database file */
-    private static final String DATABASE_NAME = "shelter.db";
+    private static final String DATABASE_NAME = "bookstore.db";
 
     /**
      * Database version. If you change the database schema, you must increment the database version.
@@ -37,7 +37,7 @@ public class BookDbHelper extends SQLiteOpenHelper {
                 + BookContract.BookEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
                 + BookContract.BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
                 + BookContract.BookEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, "
-                + BookContract.BookEntry.COLUMN_SUPPLIER_PHONE + " TEXT);";
+                + BookContract.BookEntry.COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
