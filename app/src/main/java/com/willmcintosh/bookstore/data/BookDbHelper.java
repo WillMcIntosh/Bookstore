@@ -8,7 +8,9 @@ public class BookDbHelper extends SQLiteOpenHelper {
 
     public static final String LOG_TAG = BookDbHelper.class.getSimpleName();
 
-    /** Name of the database file */
+    /**
+     * Name of the database file
+     */
     private static final String DATABASE_NAME = "bookstore.db";
 
     /**
@@ -31,13 +33,13 @@ public class BookDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the books table
-        String SQL_CREATE_BOOKS_TABLE =  "CREATE TABLE " + BookContract.BookEntry.TABLE_NAME + " ("
-                + BookContract.BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + BookContract.BookEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
-                + BookContract.BookEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
-                + BookContract.BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
-                + BookContract.BookEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, "
-                + BookContract.BookEntry.COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL);";
+        String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BookContract.BookEntry.TABLE_NAME + " " +
+                "(" + BookContract.BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                BookContract.BookEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " + BookContract
+                .BookEntry.COLUMN_PRICE + " INTEGER NOT NULL, " + BookContract.BookEntry
+                .COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " + BookContract.BookEntry
+                .COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, " + BookContract.BookEntry
+                .COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_BOOKS_TABLE);

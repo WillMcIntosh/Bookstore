@@ -57,35 +57,22 @@ public class MainActivity extends AppCompatActivity {
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN_PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE };
+        String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME, BookEntry
+                .COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE};
 
         // query the books table
-        Cursor cursor = db.query(
-                BookEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null);
+        Cursor cursor = db.query(BookEntry.TABLE_NAME, projection, null, null, null, null, null);
 
         TextView displayView = findViewById(R.id.text_view_book);
 
         try {
             // Create a header row in the text view
             displayView.setText("The books table contains " + cursor.getCount() + " books.\n\n");
-            displayView.append(BookEntry._ID + " | " +
-                    BookEntry.COLUMN_PRODUCT_NAME + " | " +
-                    BookEntry.COLUMN_PRICE + " | " +
-                    BookEntry.COLUMN_QUANTITY + " | " +
-                    BookEntry.COLUMN_SUPPLIER_NAME + " | " +
-                    BookEntry.COLUMN_SUPPLIER_PHONE + "\n");
+            displayView.append(BookEntry._ID + " | " + BookEntry.COLUMN_PRODUCT_NAME + " | " +
+                    BookEntry.COLUMN_PRICE + " | " + BookEntry.COLUMN_QUANTITY + " | " +
+                    BookEntry.COLUMN_SUPPLIER_NAME + " | " + BookEntry.COLUMN_SUPPLIER_PHONE +
+                    "\n");
 
             // get index of each column
             int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
@@ -104,12 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 String currentSupplier = cursor.getString(supplierColumnIndex);
                 String currentPhone = cursor.getString(phoneColumnIndex);
                 // Display current values in TextView
-                displayView.append(("\n" + currentID + " | " +
-                        currentProductName + " | " +
-                        currentPrice + " | " +
-                        currentQuantity + " | " +
-                        currentSupplier + " | " +
-                        currentPhone));
+                displayView.append(("\n" + currentID + " | " + currentProductName + " | " +
+                        currentPrice + " | " + currentQuantity + " | " + currentSupplier + " | "
+                        + currentPhone));
             }
 
         } finally {
@@ -158,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
         long rowsDeleted = db.delete(BookEntry.TABLE_NAME, "1", null);
 
         // Show a toast message for number of rows deleted
-        Toast.makeText(this, "Successfully deleted " + rowsDeleted + " rows.", Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(this, "Successfully deleted " + rowsDeleted + " rows.", Toast
+                .LENGTH_SHORT).show();
     }
 
 

@@ -7,7 +7,8 @@ import android.provider.BaseColumns;
  */
 public final class BookContract {
 
-    private BookContract() {}
+    private BookContract() {
+    }
 
 
     public static final class BookEntry implements BaseColumns {
