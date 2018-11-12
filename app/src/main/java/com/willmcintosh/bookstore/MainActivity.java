@@ -30,11 +30,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id
+                .fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                Intent intent = new Intent(MainActivity.this, EditorActivity
+                        .class);
                 startActivity(intent);
             }
         });
@@ -57,30 +59,38 @@ public class MainActivity extends AppCompatActivity {
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME, BookEntry
-                .COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE};
+        String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry
+                .COLUMN_SUPPLIER_NAME, BookEntry.COLUMN_SUPPLIER_PHONE};
 
         // query the books table
-        Cursor cursor = db.query(BookEntry.TABLE_NAME, projection, null, null, null, null, null);
+        Cursor cursor = db.query(BookEntry.TABLE_NAME, projection, null,
+                null, null, null, null);
 
         TextView displayView = findViewById(R.id.text_view_book);
 
         try {
             // Create a header row in the text view
-            displayView.setText("The books table contains " + cursor.getCount() + " books.\n\n");
-            displayView.append(BookEntry._ID + " | " + BookEntry.COLUMN_PRODUCT_NAME + " | " +
-                    BookEntry.COLUMN_PRICE + " | " + BookEntry.COLUMN_QUANTITY + " | " +
-                    BookEntry.COLUMN_SUPPLIER_NAME + " | " + BookEntry.COLUMN_SUPPLIER_PHONE +
-                    "\n");
+            displayView.setText("The books table contains " + cursor.getCount
+                    () + " books.\n\n");
+            displayView.append(BookEntry._ID + " | " + BookEntry
+                    .COLUMN_PRODUCT_NAME + " | " + BookEntry.COLUMN_PRICE + "" +
+                    " | " + BookEntry.COLUMN_QUANTITY + " | " + BookEntry
+                    .COLUMN_SUPPLIER_NAME + " | " + BookEntry
+                    .COLUMN_SUPPLIER_PHONE + "\n");
 
             // get index of each column
             int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-            int quantColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
-            int supplierColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
-            int phoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE);
+            int nameColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_PRODUCT_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_PRICE);
+            int quantColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_QUANTITY);
+            int supplierColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_SUPPLIER_NAME);
+            int phoneColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_SUPPLIER_PHONE);
 
             // iterate through returned rows and add information to display
             while (cursor.moveToNext()) {
@@ -91,9 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 String currentSupplier = cursor.getString(supplierColumnIndex);
                 String currentPhone = cursor.getString(phoneColumnIndex);
                 // Display current values in TextView
-                displayView.append(("\n" + currentID + " | " + currentProductName + " | " +
-                        currentPrice + " | " + currentQuantity + " | " + currentSupplier + " | "
-                        + currentPhone));
+                displayView.append(("\n" + currentID + " | " +
+                        currentProductName + " | " + currentPrice + " | " +
+                        currentQuantity + " | " + currentSupplier + " | " +
+                        currentPhone));
             }
 
         } finally {
@@ -120,13 +131,17 @@ public class MainActivity extends AppCompatActivity {
 
         long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
 
-        // Show a toast message depending on whether or not the insertion was successful
+        // Show a toast message depending on whether or not the insertion was
+        // successful
         if (newRowId == -1) {
             // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with importing dummy data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error with importing dummy data", Toast
+                    .LENGTH_SHORT).show();
         } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, "Book saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
+            // Otherwise, the insertion was successful and we can display a
+            // toast with the row ID.
+            Toast.makeText(this, "Book saved with row id: " + newRowId, Toast
+                    .LENGTH_SHORT).show();
         }
 
     }
@@ -142,8 +157,8 @@ public class MainActivity extends AppCompatActivity {
         long rowsDeleted = db.delete(BookEntry.TABLE_NAME, "1", null);
 
         // Show a toast message for number of rows deleted
-        Toast.makeText(this, "Successfully deleted " + rowsDeleted + " rows.", Toast
-                .LENGTH_SHORT).show();
+        Toast.makeText(this, "Successfully deleted " + rowsDeleted + " rows" +
+                ".", Toast.LENGTH_SHORT).show();
     }
 
 

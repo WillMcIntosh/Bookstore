@@ -14,7 +14,8 @@ public class BookDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "bookstore.db";
 
     /**
-     * Database version. If you change the database schema, you must increment the database version.
+     * Database version. If you change the database schema, you must
+     * increment the database version.
      */
     private static final int DATABASE_VERSION = 1;
 
@@ -32,13 +33,16 @@ public class BookDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create a String that contains the SQL statement to create the books table
-        String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BookContract.BookEntry.TABLE_NAME + " " +
-                "(" + BookContract.BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                BookContract.BookEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " + BookContract
-                .BookEntry.COLUMN_PRICE + " INTEGER NOT NULL, " + BookContract.BookEntry
-                .COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " + BookContract.BookEntry
-                .COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, " + BookContract.BookEntry
+        // Create a String that contains the SQL statement to create the
+        // books table
+        String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BookContract
+                .BookEntry.TABLE_NAME + " " + "(" + BookContract.BookEntry
+                ._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + BookContract
+                .BookEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
+                BookContract.BookEntry.COLUMN_PRICE + " INTEGER NOT NULL, " +
+                BookContract.BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL " +
+                "DEFAULT 0, " + BookContract.BookEntry.COLUMN_SUPPLIER_NAME +
+                " TEXT NOT NULL, " + BookContract.BookEntry
                 .COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL);";
 
         // Execute the SQL statement
@@ -50,8 +54,10 @@ public class BookDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // The database is still at version 1, so there's nothing to do be done here.
-        String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + BookContract.BookEntry.TABLE_NAME;
+        // The database is still at version 1, so there's nothing to do be
+        // done here.
+        String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + BookContract
+                .BookEntry.TABLE_NAME;
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
