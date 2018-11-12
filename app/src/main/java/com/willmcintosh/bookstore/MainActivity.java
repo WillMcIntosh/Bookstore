@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         //  get db in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+        // delete all rows
         long rowsDeleted = db.delete(BookEntry.TABLE_NAME, "1", null);
 
         // Show a toast message for number of rows deleted
