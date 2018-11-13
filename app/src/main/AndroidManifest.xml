@@ -25,6 +25,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <provider
+            android:name=".data.BookProvider"
+            android:authorities="com.willmcintosh.bookstore"
+            android:exported="false" />
     </application>
 
 </manifest>
