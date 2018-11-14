@@ -2,6 +2,7 @@ package com.willmcintosh.bookstore;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -59,11 +60,6 @@ public class EditorActivity extends AppCompatActivity {
         String supplierNameString = mSupplierEditText.getText().toString().trim();
         String phoneString = mPhoneEditText.getText().toString().trim();
 
-        // Create database helper
-        BookDbHelper mDbHelper = new BookDbHelper(this);
-        // get db in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         // create ContentValues object
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, nameString);
@@ -72,19 +68,20 @@ public class EditorActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE, phoneString);
 
-        long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
+        // Insert a new book into the provider, returning the content URI for
+        // the new book.
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
-        // Show a toast message depending on whether or not the insertion was
-        // successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with importing dummy data", Toast
-                    .LENGTH_SHORT).show();
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newUri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_book_failed),
+                    Toast.LENGTH_SHORT).show();
         } else {
-            // Otherwise, the insertion was successful and we can display a
-            // toast with the row ID.
-            Toast.makeText(this, "Book saved with row id: " + newRowId, Toast
-                    .LENGTH_SHORT).show();
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string
+                            .editor_insert_book_success),
+                    Toast.LENGTH_SHORT).show();
         }
 
     }

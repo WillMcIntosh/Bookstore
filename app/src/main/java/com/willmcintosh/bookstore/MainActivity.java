@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,11 +19,6 @@ import com.willmcintosh.bookstore.data.BookDbHelper;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    /**
-     * database helper
-     */
-    private BookDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // For accessing database
-        mDbHelper = new BookDbHelper(this);
     }
 
     @Override
@@ -56,16 +50,17 @@ public class MainActivity extends AppCompatActivity {
      * Also show column headers and contents via a cursor object
      */
     private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME,
                 BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry
                 .COLUMN_SUPPLIER_NAME, BookEntry.COLUMN_SUPPLIER_PHONE};
 
         // query the books table
-        Cursor cursor = db.query(BookEntry.TABLE_NAME, projection, null,
-                null, null, null, null);
+        Cursor cursor = getContentResolver().query(
+                BookEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
 
         TextView displayView = findViewById(R.id.text_view_book);
 
@@ -118,10 +113,7 @@ public class MainActivity extends AppCompatActivity {
      * Insert dummy data to test functionality for part 1
      */
     private void insertBook() {
-        // get db in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-        // create ContentValues object
+                // create ContentValues object
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, "Test Book");
         values.put(BookEntry.COLUMN_PRICE, 500);
@@ -129,19 +121,18 @@ public class MainActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, "Random House");
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE, "+1-888-555-1234");
 
-        long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
-        // Show a toast message depending on whether or not the insertion was
-        // successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with importing dummy data", Toast
-                    .LENGTH_SHORT).show();
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newUri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_book_failed),
+                    Toast.LENGTH_SHORT).show();
         } else {
-            // Otherwise, the insertion was successful and we can display a
-            // toast with the row ID.
-            Toast.makeText(this, "Book saved with row id: " + newRowId, Toast
-                    .LENGTH_SHORT).show();
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string
+                            .editor_insert_book_success),
+                    Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -150,15 +141,15 @@ public class MainActivity extends AppCompatActivity {
      * Delete all entries from the books table
      */
     private void deleteBooks() {
-        //  get db in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-        // delete all rows
-        long rowsDeleted = db.delete(BookEntry.TABLE_NAME, "1", null);
-
-        // Show a toast message for number of rows deleted
-        Toast.makeText(this, "Successfully deleted " + rowsDeleted + " rows" +
-                ".", Toast.LENGTH_SHORT).show();
+//        //  get db in write mode
+//        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+//
+//        // delete all rows
+//        long rowsDeleted = db.delete(BookEntry.TABLE_NAME, "1", null);
+//
+//        // Show a toast message for number of rows deleted
+//        Toast.makeText(this, "Successfully deleted " + rowsDeleted + " rows" +
+//                ".", Toast.LENGTH_SHORT).show();
     }
 
 

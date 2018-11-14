@@ -36,4 +36,10 @@
     <!-- Label for editor overflow menu option that deletes the current book [CHAR LIMIT=20] -->
     <string name="action_delete">Delete</string>
 
+    <!-- Successful book save -->
+    <string name="editor_insert_book_success">Book saved!</string>
+
+    <!-- Failed book save -->
+    <string name="editor_insert_book_failed">Book failed to save!</string>
+
 </resources>
