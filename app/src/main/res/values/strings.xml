@@ -48,6 +48,9 @@
     <!-- Not all fields filled out -->
     <string name="editor_fill_all_fields">Please fill out all fields</string>
 
+    <!-- invalid phone number -->
+    <string name="editor_valid_phone">Please input a valid phone number</string>
+
     <!-- Title text for the empty view, which describes the empty shelf image
     [CHAR LIMIT=50] -->
     <string name="empty_view_title_text">Looks like you have no books...</string>

@@ -149,6 +149,14 @@ public class EditorActivity extends AppCompatActivity implements
             return;
         }
 
+        // check for invalid phone number which would throw an exception in
+        // the Provider
+        if (!BookEntry.validPhone(phoneString)) {
+            Toast.makeText(this, getString(R.string.editor_valid_phone),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // create ContentValues object
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, nameString);
