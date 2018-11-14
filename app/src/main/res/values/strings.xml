@@ -42,4 +42,13 @@
     <!-- Failed book save -->
     <string name="editor_insert_book_failed">Book failed to save!</string>
 
+    <!-- Title text for the empty view, which describes the empty shelf image
+    [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">Looks like you have no books...</string>
+
+    <!-- Subtitle text for the empty view that prompts the user to add a book
+    [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Get started by adding a
+        book</string>
+
 </resources>

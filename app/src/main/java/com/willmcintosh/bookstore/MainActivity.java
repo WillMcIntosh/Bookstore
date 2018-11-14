@@ -1,24 +1,33 @@
 package com.willmcintosh.bookstore;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.willmcintosh.bookstore.data.BookContract.BookEntry;
-import com.willmcintosh.bookstore.data.BookDbHelper;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager
+        .LoaderCallbacks<Cursor> {
+
+    private static final int BOOK_LOADER = 0;
+
+    BookCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,83 +46,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
+        // Find the ListView which will be populated with the store data
+        ListView bookListView = (ListView) findViewById(R.id.list);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
+        // Find and set empty view on the ListView, so that it only shows
+        // when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        bookListView.setEmptyView(emptyView);
 
-    /**
-     * Method to display number of books in a textview
-     * Also show column headers and contents via a cursor object
-     */
-    private void displayDatabaseInfo() {
-        String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry
-                .COLUMN_SUPPLIER_NAME, BookEntry.COLUMN_SUPPLIER_PHONE};
+        // set up adapter and attach to list view
+        mCursorAdapter = new BookCursorAdapter(this, null);
+        bookListView.setAdapter(mCursorAdapter);
 
-        // query the books table
-        Cursor cursor = getContentResolver().query(
-                BookEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-
-        TextView displayView = findViewById(R.id.text_view_book);
-
-        try {
-            // Create a header row in the text view
-            displayView.setText("The books table contains " + cursor.getCount
-                    () + " books.\n\n");
-            displayView.append(BookEntry._ID + " | " + BookEntry
-                    .COLUMN_PRODUCT_NAME + " | " + BookEntry.COLUMN_PRICE + "" +
-                    " | " + BookEntry.COLUMN_QUANTITY + " | " + BookEntry
-                    .COLUMN_SUPPLIER_NAME + " | " + BookEntry
-                    .COLUMN_SUPPLIER_PHONE + "\n");
-
-            // get index of each column
-            int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(BookEntry
-                    .COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry
-                    .COLUMN_PRICE);
-            int quantColumnIndex = cursor.getColumnIndex(BookEntry
-                    .COLUMN_QUANTITY);
-            int supplierColumnIndex = cursor.getColumnIndex(BookEntry
-                    .COLUMN_SUPPLIER_NAME);
-            int phoneColumnIndex = cursor.getColumnIndex(BookEntry
-                    .COLUMN_SUPPLIER_PHONE);
-
-            // iterate through returned rows and add information to display
-            while (cursor.moveToNext()) {
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentProductName = cursor.getString(nameColumnIndex);
-                int currentPrice = cursor.getInt(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantColumnIndex);
-                String currentSupplier = cursor.getString(supplierColumnIndex);
-                String currentPhone = cursor.getString(phoneColumnIndex);
-                // Display current values in TextView
-                displayView.append(("\n" + currentID + " | " +
-                        currentProductName + " | " + currentPrice + " | " +
-                        currentQuantity + " | " + currentSupplier + " | " +
-                        currentPhone));
-            }
-
-        } finally {
-            // close the cursor object always
-            cursor.close();
-        }
+        // start loader
+        getLoaderManager().initLoader(BOOK_LOADER, null, this);
 
     }
+
 
     /**
      * Insert dummy data to test functionality for part 1
      */
     private void insertBook() {
-                // create ContentValues object
+        // create ContentValues object
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, "Test Book");
         values.put(BookEntry.COLUMN_PRICE, 500);
@@ -123,16 +78,18 @@ public class MainActivity extends AppCompatActivity {
 
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
-        // Show a toast message depending on whether or not the insertion was successful
+        // Show a toast message depending on whether or not the insertion was
+        // successful
         if (newUri == null) {
-            // If the new content URI is null, then there was an error with insertion.
-            Toast.makeText(this, getString(R.string.editor_insert_book_failed),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast.
+            // If the new content URI is null, then there was an error with
+            // insertion.
             Toast.makeText(this, getString(R.string
-                            .editor_insert_book_success),
-                    Toast.LENGTH_SHORT).show();
+                    .editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the insertion was successful and we can display a
+            // toast.
+            Toast.makeText(this, getString(R.string
+                    .editor_insert_book_success), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -141,15 +98,10 @@ public class MainActivity extends AppCompatActivity {
      * Delete all entries from the books table
      */
     private void deleteBooks() {
-//        //  get db in write mode
-//        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-//
-//        // delete all rows
-//        long rowsDeleted = db.delete(BookEntry.TABLE_NAME, "1", null);
-//
-//        // Show a toast message for number of rows deleted
-//        Toast.makeText(this, "Successfully deleted " + rowsDeleted + " rows" +
-//                ".", Toast.LENGTH_SHORT).show();
+        int rowsDeleted = getContentResolver().delete(BookEntry.CONTENT_URI,
+                null, null);
+        Log.v("MainActivity", rowsDeleted + " rows deleted from bookstore " +
+                "database");
     }
 
 
@@ -168,15 +120,43 @@ public class MainActivity extends AppCompatActivity {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
                 insertBook();
-                displayDatabaseInfo();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
                 deleteBooks();
-                displayDatabaseInfo();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+        // Define a projection that specifies the columns of interest
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_QUANTITY};
+
+        // execute ContentProvider's query method on a background thread
+        return new CursorLoader(this,
+                BookEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        // update BookCursorAdapter with new cursor
+        mCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        // called when data needs to be deleted
+        mCursorAdapter.swapCursor(null);
+    }
 }

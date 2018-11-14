@@ -52,11 +52,13 @@ public class BookCursorAdapter extends CursorAdapter {
         // read book attributes from current book
         String bookTitle = cursor.getString(titleColumnIndex);
         int bookPrice = cursor.getInt(priceColumnIndex);
+        String priceString = Integer.toString(bookPrice);
         int bookQuantity = cursor.getInt(quantityColumnIndex);
+        String quantString = Integer.toString(bookQuantity);
 
         // update textview with attributes from current book
         titleTextView.setText(bookTitle);
-        priceTextView.setText(bookPrice);
-        quantityTextView.setText(bookQuantity);
+        priceTextView.setText(priceString);
+        quantityTextView.setText(quantString);
     }
 }
