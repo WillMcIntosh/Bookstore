@@ -145,9 +145,9 @@ public class BookProvider extends ContentProvider {
                     "name" + ".");
         }
 
-        // check that phone number is valid
+        // check that phone number is valid if not null
         String phone = values.getAsString(BookEntry.COLUMN_SUPPLIER_PHONE);
-        if (phone == null || !BookEntry.validPhone(phone)) {
+        if (!phone.equals("")  && !BookEntry.validPhone(phone)) {
             throw new IllegalArgumentException("Book requires a valid " +
                     "supplier phone");
         }

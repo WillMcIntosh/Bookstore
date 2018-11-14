@@ -43,7 +43,7 @@ public class BookDbHelper extends SQLiteOpenHelper {
                 BookContract.BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL "
                 + "DEFAULT 0, " + BookContract.BookEntry.COLUMN_SUPPLIER_NAME
                 + " TEXT NOT NULL, " + BookContract.BookEntry
-                .COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL);";
+                .COLUMN_SUPPLIER_PHONE + " TEXT);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
