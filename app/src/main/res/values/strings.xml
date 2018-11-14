@@ -45,6 +45,9 @@
     <!-- Failed book save -->
     <string name="editor_update_book_failed">Book failed to update</string>
 
+    <!-- Invalid -->
+    <string name="editor_null_phone">Invalid phone number saved as null</string>
+
     <!-- Not all fields filled out -->
     <string name="editor_fill_all_fields">Please fill out all fields</string>
 

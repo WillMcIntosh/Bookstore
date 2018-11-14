@@ -153,6 +153,8 @@ public class EditorActivity extends AppCompatActivity implements
         // the Provider
         if (!BookEntry.validPhone(phoneString)) {
             phoneString = "";
+            Toast.makeText(this, getString(R.string
+                    .editor_null_phone), Toast.LENGTH_SHORT).show();
         }
 
         // create ContentValues object

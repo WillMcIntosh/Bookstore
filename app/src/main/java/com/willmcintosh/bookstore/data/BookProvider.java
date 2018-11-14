@@ -238,7 +238,7 @@ public class BookProvider extends ContentProvider {
         if (values.containsKey(BookEntry.COLUMN_SUPPLIER_PHONE)) {
             // check that phone number is valid
             String phone = values.getAsString(BookEntry.COLUMN_SUPPLIER_PHONE);
-            if (phone == null || !BookEntry.validPhone(phone)) {
+            if (!phone.equals("") && !BookEntry.validPhone(phone)) {
                 throw new IllegalArgumentException("Book requires a valid " +
                         "supplier phone");
             }
