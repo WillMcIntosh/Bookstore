@@ -231,7 +231,7 @@ public class BookProvider extends ContentProvider {
                     .COLUMN_SUPPLIER_NAME);
             if (supplierName == null) {
                 throw new IllegalArgumentException("Book requires a supplier " +
-                        "" + "name" + ".");
+                        "" + "" + "name" + ".");
             }
         }
 
@@ -281,20 +281,20 @@ public class BookProvider extends ContentProvider {
         switch (match) {
             case BOOKS:
                 // Delete all rows that match the selection and selection args
-                rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection,
-                        selectionArgs);
+                rowsDeleted = database.delete(BookEntry.TABLE_NAME,
+                        selection, selectionArgs);
                 break;
             case BOOK_ID:
                 // Delete a single row given by the ID in the URI
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris
                         .parseId(uri))};
-                rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection,
-                        selectionArgs);
+                rowsDeleted = database.delete(BookEntry.TABLE_NAME,
+                        selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Deletion is not supported" +
-                        " for " + uri);
+                throw new IllegalArgumentException("Deletion is not " +
+                        "supported" + " for " + uri);
         }
 
         // If 1 or more rows were deleted notify listeners
@@ -317,8 +317,8 @@ public class BookProvider extends ContentProvider {
             case BOOK_ID:
                 return BookEntry.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalStateException("Unknown URI " + uri + " with" +
-                        " match " + match);
+                throw new IllegalStateException("Unknown URI " + uri + " " +
+                        "with" + " match " + match);
         }
     }
 }

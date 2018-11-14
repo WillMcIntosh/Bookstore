@@ -17,7 +17,8 @@ public final class BookContract {
      */
     public static final String CONTENT_AUTHORITY = "com.willmcintosh.bookstore";
 
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" +
+            CONTENT_AUTHORITY);
 
     public static final String PATH_BOOKS = "books";
 
@@ -25,8 +26,11 @@ public final class BookContract {
     public static final class BookEntry implements BaseColumns {
         public final static String TABLE_NAME = "books";
 
-        /** Content URI to access the pet data in the provider */
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
+        /**
+         * Content URI to access the pet data in the provider
+         */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath
+                (BASE_CONTENT_URI, PATH_BOOKS);
 
         /**
          * Unique ID for the book
@@ -60,26 +64,24 @@ public final class BookContract {
 
         /**
          * Returns whether a phone matches a valid phone pattern
-         *
          */
-        public static boolean validPhone(String number)
-        {
+        public static boolean validPhone(String number) {
             return android.util.Patterns.PHONE.matcher(number).matches();
         }
 
         /**
          * The MIME type of the {@link #CONTENT_URI} for a list of books.
          */
-        public static final String CONTENT_LIST_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" +
-                        CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+        public static final String CONTENT_LIST_TYPE = ContentResolver
+                .CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" +
+                PATH_BOOKS;
 
         /**
          * The MIME type of the {@link #CONTENT_URI} for a single book.
          */
-        public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" +
-                        CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver
+                .CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" +
+                PATH_BOOKS;
 
 
     }

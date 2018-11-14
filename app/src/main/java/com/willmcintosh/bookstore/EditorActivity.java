@@ -22,33 +22,43 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
-
 import com.willmcintosh.bookstore.data.BookContract.BookEntry;
 
 public class EditorActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor>{
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int EXISTING_BOOK_LOADER = 0;
 
     private Uri mCurrentBookUri;
 
-    /** EditText field to enter the book's name */
+    /**
+     * EditText field to enter the book's name
+     */
     private EditText mNameEditText;
 
-    /** EditText field to enter the book's price */
+    /**
+     * EditText field to enter the book's price
+     */
     private EditText mPriceEditText;
 
-    /** EditText field to enter the book's quantity */
+    /**
+     * EditText field to enter the book's quantity
+     */
     private EditText mQuantityEditText;
 
-    /** EditText field to enter the supplier's name */
+    /**
+     * EditText field to enter the supplier's name
+     */
     private EditText mSupplierEditText;
 
-    /** EditText field to enter the supplier's phone */
+    /**
+     * EditText field to enter the supplier's phone
+     */
     private EditText mPhoneEditText;
 
-    /** Boolean flag to track if entry has been edited */
+    /**
+     * Boolean flag to track if entry has been edited
+     */
     private boolean mBookHasChanged = false;
 
     /**
@@ -79,8 +89,7 @@ public class EditorActivity extends AppCompatActivity implements
         } else {
             setTitle(R.string.editor_activity_title_edit_book);
 
-            getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null,
-                    this);
+            getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
         // Find all relevant views that we will need to read user input from
@@ -117,7 +126,8 @@ public class EditorActivity extends AppCompatActivity implements
         if (!quantityString.equals("")) {
             quantity = Integer.parseInt(quantityString);
         }
-        String supplierNameString = mSupplierEditText.getText().toString().trim();
+        String supplierNameString = mSupplierEditText.getText().toString()
+                .trim();
         String phoneString = mPhoneEditText.getText().toString().trim();
 
         // check if this is a new book with no data entered
@@ -130,13 +140,11 @@ public class EditorActivity extends AppCompatActivity implements
         }
 
         // check if user forgot to fill out a field
-        if (TextUtils.isEmpty(nameString) ||
-                TextUtils.isEmpty(priceString) || TextUtils.isEmpty
-                (quantityString) || TextUtils.isEmpty(supplierNameString) ||
-                TextUtils.isEmpty(phoneString)) {
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString)
+                || TextUtils.isEmpty(quantityString) || TextUtils.isEmpty
+                (supplierNameString) || TextUtils.isEmpty(phoneString)) {
 
-            Toast.makeText(this, getString(R.string
-                            .editor_fill_all_fields),
+            Toast.makeText(this, getString(R.string.editor_fill_all_fields),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -152,19 +160,24 @@ public class EditorActivity extends AppCompatActivity implements
         // Determine if this is a new or existing book
         if (mCurrentBookUri == null) {
             // This is a new book
-            // Insert a new book into the provider, returning the content URI for
+            // Insert a new book into the provider, returning the content URI
+            // for
             // the new book.
-            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-            // Show a toast message depending on whether or not the insertion was successful
+            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI,
+                    values);
+            // Show a toast message depending on whether or not the insertion
+            // was successful
             if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_update_book_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast.
+                // If the new content URI is null, then there was an error
+                // with insertion.
                 Toast.makeText(this, getString(R.string
-                                .editor_update_book_success),
-                        Toast.LENGTH_SHORT).show();
+                        .editor_update_book_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display
+                // a toast.
+                Toast.makeText(this, getString(R.string
+                        .editor_update_book_success), Toast.LENGTH_SHORT)
+                        .show();
             }
         } else {
             // this is an existing book
@@ -178,8 +191,8 @@ public class EditorActivity extends AppCompatActivity implements
             } else {
                 // the update was successful
                 Toast.makeText(this, getString(R.string
-                        .editor_update_book_success), Toast.LENGTH_SHORT).show
-                        ();
+                        .editor_update_book_success), Toast.LENGTH_SHORT)
+                        .show();
             }
         }
 
@@ -234,14 +247,17 @@ public class EditorActivity extends AppCompatActivity implements
                 }
                 DialogInterface.OnClickListener discardButtonClickListener =
                         new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                // User clicked "Discard" button, navigate to parent activity.
-                                NavUtils.navigateUpFromSameTask(EditorActivity.this);
-                            }
-                        };
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int
+                            i) {
+                        // User clicked "Discard" button, navigate to parent
+                        // activity.
+                        NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    }
+                };
 
-                // Show a dialog that notifies the user they have unsaved changes
+                // Show a dialog that notifies the user they have unsaved
+                // changes
                 showUnsavedChangesDialog(discardButtonClickListener);
                 return true;
         }
@@ -259,16 +275,18 @@ public class EditorActivity extends AppCompatActivity implements
             return;
         }
 
-        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
-        // Create a click listener to handle the user confirming that changes should be discarded.
-        DialogInterface.OnClickListener discardButtonClickListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // User clicked "Discard" button, close the current activity.
-                        finish();
-                    }
-                };
+        // Otherwise if there are unsaved changes, setup a dialog to warn the
+        // user.
+        // Create a click listener to handle the user confirming that changes
+        // should be discarded.
+        DialogInterface.OnClickListener discardButtonClickListener = new
+                DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked "Discard" button, close the current activity.
+                finish();
+            }
+        };
 
         // Show dialog that there are unsaved changes
         showUnsavedChangesDialog(discardButtonClickListener);
@@ -277,22 +295,14 @@ public class EditorActivity extends AppCompatActivity implements
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN_PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE};
+        String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry
+                .COLUMN_SUPPLIER_NAME, BookEntry.COLUMN_SUPPLIER_PHONE};
 
-        // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(
-                this,
-                mCurrentBookUri,
-                projection,
-                null,
-                null,
-                null);
+        // This loader will execute the ContentProvider's query method on a
+        // background thread
+        return new CursorLoader(this, mCurrentBookUri, projection, null,
+                null, null);
     }
 
     @Override
@@ -305,7 +315,8 @@ public class EditorActivity extends AppCompatActivity implements
             // find columns of book attributes to display
             int titleColumnIndex = cursor.getColumnIndex(BookEntry
                     .COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
+            int priceColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(BookEntry
                     .COLUMN_QUANTITY);
             int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry
@@ -330,9 +341,7 @@ public class EditorActivity extends AppCompatActivity implements
             mPhoneEditText.setText(supplierPhone);
 
 
-
             // Update the views on the screen with the values from the database
-
 
 
         }
@@ -350,13 +359,14 @@ public class EditorActivity extends AppCompatActivity implements
 
     }
 
-    private void showUnsavedChangesDialog(
-            DialogInterface.OnClickListener discardButtonClickListener) {
+    private void showUnsavedChangesDialog(DialogInterface.OnClickListener
+                                                  discardButtonClickListener) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
-        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface
+                .OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Keep editing" button, so dismiss the dialog
                 // and continue editing the book.
@@ -373,17 +383,20 @@ public class EditorActivity extends AppCompatActivity implements
 
 
     private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
+        // Create an AlertDialog.Builder and set the message, and click
+        // listeners
         // for the postivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.delete, new DialogInterface
+                .OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete the pet.
                 deleteBook();
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface
+                .OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog
                 // and continue editing the pet.
@@ -404,11 +417,12 @@ public class EditorActivity extends AppCompatActivity implements
     private void deleteBook() {
         int rowsDeleted = 0;
         if (mCurrentBookUri != null) {
-            rowsDeleted = getContentResolver().delete(mCurrentBookUri,
-                    null, null);
+            rowsDeleted = getContentResolver().delete(mCurrentBookUri, null,
+                    null);
         }
 
-        // Show a toast message depending on whether or not the delete was successful.
+        // Show a toast message depending on whether or not the delete was
+        // successful.
         if (rowsDeleted == 0) {
             // If no rows were deleted, then there was an error with the delete.
             Toast.makeText(this, getString(R.string.editor_delete_failed),

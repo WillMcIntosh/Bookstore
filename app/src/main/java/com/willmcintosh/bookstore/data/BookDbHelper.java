@@ -40,9 +40,9 @@ public class BookDbHelper extends SQLiteOpenHelper {
                 ._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + BookContract
                 .BookEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
                 BookContract.BookEntry.COLUMN_PRICE + " INTEGER NOT NULL, " +
-                BookContract.BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL " +
-                "DEFAULT 0, " + BookContract.BookEntry.COLUMN_SUPPLIER_NAME +
-                " TEXT NOT NULL, " + BookContract.BookEntry
+                BookContract.BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL "
+                + "DEFAULT 0, " + BookContract.BookEntry.COLUMN_SUPPLIER_NAME
+                + " TEXT NOT NULL, " + BookContract.BookEntry
                 .COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL);";
 
         // Execute the SQL statement
