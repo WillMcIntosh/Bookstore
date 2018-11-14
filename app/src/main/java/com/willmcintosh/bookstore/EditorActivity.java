@@ -222,7 +222,8 @@ public class EditorActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
-                // Do nothing for now
+                // show delete confirmation
+                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -368,5 +369,56 @@ public class EditorActivity extends AppCompatActivity implements
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the pet.
+                deleteBook();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Perform the deletion of the pet in the database.
+     */
+    private void deleteBook() {
+        int rowsDeleted = 0;
+        if (mCurrentBookUri != null) {
+            rowsDeleted = getContentResolver().delete(mCurrentBookUri,
+                    null, null);
+        }
+
+        // Show a toast message depending on whether or not the delete was successful.
+        if (rowsDeleted == 0) {
+            // If no rows were deleted, then there was an error with the delete.
+            Toast.makeText(this, getString(R.string.editor_delete_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the delete was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_delete_success),
+                    Toast.LENGTH_SHORT).show();
+        }
+        // close activity
+        finish();
     }
 }
