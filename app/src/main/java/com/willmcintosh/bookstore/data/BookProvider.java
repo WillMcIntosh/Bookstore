@@ -90,6 +90,10 @@ public class BookProvider extends ContentProvider {
                 throw new IllegalArgumentException("Cannot query unknown URI"
                         + uri);
         }
+
+        // set notification URI on the Cursor
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -159,6 +163,8 @@ public class BookProvider extends ContentProvider {
             return null;
         }
 
+        getContext().getContentResolver().notifyChange(uri, null);
+
         // return the new URI with the ID appended to the end of it
         return ContentUris.withAppendedId(uri, id);
     }
@@ -181,8 +187,8 @@ public class BookProvider extends ContentProvider {
                         .parseId(uri))};
                 return updateBook(uri, contentValues, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Cannot update unknown URI" +
-                        " " + uri);
+                throw new IllegalArgumentException("Cannot update unknown " +
+                        "URI" + " " + uri);
         }
     }
 
@@ -205,7 +211,8 @@ public class BookProvider extends ContentProvider {
             // check price
             Integer price = values.getAsInteger(BookEntry.COLUMN_PRICE);
             if (price == null || price < 0) {
-                throw new IllegalArgumentException("Book requires a valid price.");
+                throw new IllegalArgumentException("Book requires a valid " +
+                        "price.");
             }
         }
 
@@ -224,7 +231,7 @@ public class BookProvider extends ContentProvider {
                     .COLUMN_SUPPLIER_NAME);
             if (supplierName == null) {
                 throw new IllegalArgumentException("Book requires a supplier " +
-                        "name" + ".");
+                        "" + "name" + ".");
             }
         }
 
@@ -237,7 +244,8 @@ public class BookProvider extends ContentProvider {
             }
         }
 
-        // If there are no values to update, then don't try to update the database
+        // If there are no values to update, then don't try to update the
+        // database
         if (values.size() == 0) {
             return 0;
         }
@@ -245,10 +253,17 @@ public class BookProvider extends ContentProvider {
         // Otherwise, get writeable database to update the data
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        // Returns the number of database rows affected by the update statement
-        return database.update(BookEntry.TABLE_NAME, values, selection,
-                selectionArgs);
+        int rowsUpdated = database.update(BookEntry.TABLE_NAME, values,
+                selection, selectionArgs);
+        // If 1 or more rows were updated, then notify all listeners that the
+        // data at the
+        // given URI has changed
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
+        // Returns the number of database rows affected by the update statement
+        return rowsUpdated;
     }
 
     /**
@@ -259,21 +274,35 @@ public class BookProvider extends ContentProvider {
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
+        // track number of deleted rows
+        int rowsDeleted = 0;
+
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case BOOKS:
                 // Delete all rows that match the selection and selection args
-                return database.delete(BookEntry.TABLE_NAME, selection,
+                rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection,
                         selectionArgs);
+                break;
             case BOOK_ID:
                 // Delete a single row given by the ID in the URI
                 selection = BookEntry._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(BookEntry.TABLE_NAME, selection,
+                selectionArgs = new String[]{String.valueOf(ContentUris
+                        .parseId(uri))};
+                rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection,
                         selectionArgs);
+                break;
             default:
-                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+                throw new IllegalArgumentException("Deletion is not supported" +
+                        " for " + uri);
         }
+
+        // If 1 or more rows were deleted notify listeners
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsDeleted;
     }
 
     /**
@@ -288,7 +317,8 @@ public class BookProvider extends ContentProvider {
             case BOOK_ID:
                 return BookEntry.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+                throw new IllegalStateException("Unknown URI " + uri + " with" +
+                        " match " + match);
         }
     }
 }

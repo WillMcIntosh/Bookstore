@@ -1,6 +1,7 @@
 package com.willmcintosh.bookstore;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -57,6 +59,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         // set up adapter and attach to list view
         mCursorAdapter = new BookCursorAdapter(this, null);
         bookListView.setAdapter(mCursorAdapter);
+
+        // set up on click listener
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener
+                () {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view,
+                                    int position, long id) {
+
+                // create new intent to go to EditorActivity
+                Intent intent = new Intent(MainActivity.this,
+                        EditorActivity.class);
+
+                // Form the content URI that represents list item clicked on
+                Uri currentPetUri = ContentUris.withAppendedId(BookEntry
+                        .CONTENT_URI, id);
+
+                // Set URI on the data field of intent
+                intent.setData(currentPetUri);
+
+                // Launch EditorActiviy
+                startActivity(intent);
+            }
+        });
 
         // start loader
         getLoaderManager().initLoader(BOOK_LOADER, null, this);

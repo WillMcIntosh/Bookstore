@@ -1,21 +1,32 @@
 package com.willmcintosh.bookstore;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.willmcintosh.bookstore.data.BookDbHelper;
+
+
 import com.willmcintosh.bookstore.data.BookContract.BookEntry;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final int EXISTING_BOOK_LOADER = 0;
+
+    private Uri mCurrentBookUri;
 
     /** EditText field to enter the book's name */
     private EditText mNameEditText;
@@ -36,6 +47,20 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        // get intent
+        Intent intent = getIntent();
+        mCurrentBookUri = intent.getData();
+
+        // check if URI was passed in
+        if (mCurrentBookUri == null) {
+            setTitle(R.string.editor_activity_title_new_book);
+        } else {
+            setTitle(R.string.editor_activity_title_edit_book);
+
+            getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null,
+                    this);
+        }
 
         // Find all relevant views that we will need to read user input from
         mNameEditText = findViewById(R.id.edit_book_name);
@@ -116,5 +141,81 @@ public class EditorActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE};
+
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(
+                this,
+                mCurrentBookUri,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+
+        if (cursor.moveToFirst()) {
+            // find columns of book attributes to display
+            int titleColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_PRODUCT_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_QUANTITY);
+            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_SUPPLIER_NAME);
+            int phoneColumnIndex = cursor.getColumnIndex(BookEntry
+                    .COLUMN_SUPPLIER_PHONE);
+
+            // read book attributes from current book
+            String bookTitle = cursor.getString(titleColumnIndex);
+            int bookPrice = cursor.getInt(priceColumnIndex);
+            String priceString = Integer.toString(bookPrice);
+            int bookQuantity = cursor.getInt(quantityColumnIndex);
+            String quantString = Integer.toString(bookQuantity);
+            String supplierName = cursor.getString(supplierNameColumnIndex);
+            String supplierPhone = cursor.getString(phoneColumnIndex);
+
+            // update textview with attributes from current book
+            mNameEditText.setText(bookTitle);
+            mPriceEditText.setText(priceString);
+            mQuantityEditText.setText(quantString);
+            mSupplierEditText.setText(supplierName);
+            mPhoneEditText.setText(supplierPhone);
+
+
+
+            // Update the views on the screen with the values from the database
+
+
+
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        // clear all data from input fields
+        mNameEditText.setText("");
+        mPriceEditText.setText("");
+        mQuantityEditText.setText("");
+        mSupplierEditText.setText("");
+        mPhoneEditText.setText("");
+
     }
 }

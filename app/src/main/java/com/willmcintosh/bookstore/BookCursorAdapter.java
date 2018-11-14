@@ -42,7 +42,7 @@ public class BookCursorAdapter extends CursorAdapter {
         TextView priceTextView = view.findViewById(R.id.price);
         TextView quantityTextView = view.findViewById(R.id.quantity);
 
-        // find columns of book attirbutes to display
+        // find columns of book attributes to display
         int titleColumnIndex = cursor.getColumnIndex(BookEntry
                 .COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
