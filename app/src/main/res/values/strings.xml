@@ -40,10 +40,13 @@
     <string name="action_delete">Delete</string>
 
     <!-- Successful book save -->
-    <string name="editor_insert_book_success">Book saved!</string>
+    <string name="editor_update_book_success">Book updated</string>
 
     <!-- Failed book save -->
-    <string name="editor_insert_book_failed">Book failed to save!</string>
+    <string name="editor_update_book_failed">Book failed to update</string>
+
+    <!-- Not all fields filled out -->
+    <string name="editor_fill_all_fields">Please fill out all fields</string>
 
     <!-- Title text for the empty view, which describes the empty shelf image
     [CHAR LIMIT=50] -->

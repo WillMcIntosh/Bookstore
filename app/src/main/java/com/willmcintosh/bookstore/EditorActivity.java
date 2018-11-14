@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -73,17 +74,45 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Get user input from editor and save new book into database
+     * Get user input from editor and save book into database
      */
-    private void insertBook() {
+    private void saveBook() {
         // Read from input fields
         String nameString = mNameEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
-        int price = Integer.parseInt(priceString);
+        int price = 0;
+        if (!priceString.equals("")) {
+            price = Integer.parseInt(priceString);
+        }
+
         String quantityString = mQuantityEditText.getText().toString().trim();
-        int quantity = Integer.parseInt(quantityString);
+        int quantity = 0;
+        if (!quantityString.equals("")) {
+            quantity = Integer.parseInt(quantityString);
+        }
         String supplierNameString = mSupplierEditText.getText().toString().trim();
         String phoneString = mPhoneEditText.getText().toString().trim();
+
+        // check if this is a new book with no data entered
+        if (mCurrentBookUri == null && TextUtils.isEmpty(nameString) &&
+                TextUtils.isEmpty(priceString) && TextUtils.isEmpty
+                (quantityString) && TextUtils.isEmpty(supplierNameString) &&
+                TextUtils.isEmpty(phoneString)) {
+
+            return;
+        }
+
+        // check if user forgot to fill out a field
+        if (TextUtils.isEmpty(nameString) ||
+                TextUtils.isEmpty(priceString) || TextUtils.isEmpty
+                (quantityString) || TextUtils.isEmpty(supplierNameString) ||
+                TextUtils.isEmpty(phoneString)) {
+
+            Toast.makeText(this, getString(R.string
+                            .editor_fill_all_fields),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // create ContentValues object
         ContentValues values = new ContentValues();
@@ -93,21 +122,42 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE, phoneString);
 
-        // Insert a new book into the provider, returning the content URI for
-        // the new book.
-        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
-            // If the new content URI is null, then there was an error with insertion.
-            Toast.makeText(this, getString(R.string.editor_insert_book_failed),
-                    Toast.LENGTH_SHORT).show();
+        // Determine if this is a new or existing book
+        if (mCurrentBookUri == null) {
+            // This is a new book
+            // Insert a new book into the provider, returning the content URI for
+            // the new book.
+            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+            // Show a toast message depending on whether or not the insertion was successful
+            if (newUri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_update_book_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string
+                                .editor_update_book_success),
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Otherwise, the insertion was successful and we can display a toast.
-            Toast.makeText(this, getString(R.string
-                            .editor_insert_book_success),
-                    Toast.LENGTH_SHORT).show();
+            // this is an existing book
+            int rowsAffected = getContentResolver().update(mCurrentBookUri,
+                    values, null, null);
+
+            if (rowsAffected == 0) {
+                // possible issue with update
+                Toast.makeText(this, getString(R.string
+                        .editor_update_book_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                // the update was successful
+                Toast.makeText(this, getString(R.string
+                        .editor_update_book_success), Toast.LENGTH_SHORT).show
+                        ();
+            }
         }
+
+        // Exit activity
+        finish();
 
     }
 
@@ -126,9 +176,8 @@ public class EditorActivity extends AppCompatActivity implements
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save pet to database
-                insertBook();
-                // Exit activity
-                finish();
+                saveBook();
+
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
