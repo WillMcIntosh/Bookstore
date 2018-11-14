@@ -3,15 +3,15 @@ package com.willmcintosh.bookstore.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
-/**
- * {@link ContentProvider} for Pets app.
- */
 public class BookProvider extends ContentProvider {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = BookProvider.class.getSimpleName();
 
     /**
@@ -29,11 +29,39 @@ public class BookProvider extends ContentProvider {
     }
 
     /**
-     * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order.
+     * URI matcher code for the content URI for the books table
+     */
+    private static final int BOOKS = 100;
+
+    /**
+     * URI matcher code for the content URI for a single book in the books table
+     */
+    private static final int BOOK_ID = 101;
+
+    /**
+     * UriMatcher object to match a content URI to a corresponding code.
+     */
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher
+            .NO_MATCH);
+
+    // Static initializer. This is run the first time anything is called from
+    // this class.
+    static {
+
+        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract
+                .PATH_BOOKS, BOOKS);
+        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract
+                .PATH_BOOKS + "/#", BOOK_ID);
+    }
+
+    /**
+     * Perform the query for the given URI. Use the given projection,
+     * selection, selection
+     * arguments, and sort order.
      */
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-                        String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection,
+                        String[] selectionArgs, String sortOrder) {
         return null;
     }
 
@@ -46,10 +74,12 @@ public class BookProvider extends ContentProvider {
     }
 
     /**
-     * Updates the data at the given selection and selection arguments, with the new ContentValues.
+     * Updates the data at the given selection and selection arguments, with
+     * the new ContentValues.
      */
     @Override
-    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int update(Uri uri, ContentValues contentValues, String selection,
+                      String[] selectionArgs) {
         return 0;
     }
 
