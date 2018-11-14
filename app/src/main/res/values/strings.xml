@@ -54,7 +54,17 @@
 
     <!-- Subtitle text for the empty view that prompts the user to add a book
     [CHAR LIMIT=50] -->
-    <string name="empty_view_subtitle_text">Get started by adding a
-        book</string>
+    <string name="empty_view_subtitle_text">Get started by adding a book</string>
+
+    <!-- User is leaving the editor with unsaved changes -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit
+        editing?</string>
+
+    <!-- User is leaving the editor with unsaved changes -->
+    <string name="discard">Discard</string>
+
+    <!-- User is leaving the editor with unsaved changes -->
+    <string name="keep_editing">Keep Editing</string>
+
 
 </resources>
