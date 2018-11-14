@@ -2,10 +2,14 @@ package com.willmcintosh.bookstore.data;
 
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+
+import com.willmcintosh.bookstore.data.BookContract.BookEntry;
 
 public class BookProvider extends ContentProvider {
 
@@ -62,7 +66,32 @@ public class BookProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        return null;
+        // Get readable database
+        SQLiteDatabase database = mDbHelper.getReadableDatabase();
+
+        // Instantiate cursor object
+        Cursor cursor = null;
+
+        int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                cursor = database.query(BookEntry.TABLE_NAME, projection,
+                        selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case BOOK_ID:
+                selection = BookEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris
+                        .parseId(uri))};
+                cursor = database.query(BookEntry.TABLE_NAME, projection,
+                        selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI"
+                        + uri);
+        }
+        return cursor;
     }
 
     /**
