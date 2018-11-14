@@ -109,6 +109,7 @@ public class EditorActivity extends AppCompatActivity implements
 
     }
 
+
     /**
      * Get user input from editor and save book into database
      */
@@ -142,19 +143,20 @@ public class EditorActivity extends AppCompatActivity implements
         // check if user forgot to fill out a field
         if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString)
                 || TextUtils.isEmpty(quantityString) || TextUtils.isEmpty
-                (supplierNameString) || TextUtils.isEmpty(phoneString)) {
+                (supplierNameString)) {
 
             Toast.makeText(this, getString(R.string.editor_fill_all_fields),
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
+        boolean invalidPhone = false;
         // check for invalid phone number which would throw an exception in
         // the Provider
-        if (!BookEntry.validPhone(phoneString)) {
+        if (!BookEntry.validPhone(phoneString) || TextUtils.isEmpty
+                (phoneString)) {
             phoneString = "";
-            Toast.makeText(this, getString(R.string
-                    .editor_null_phone), Toast.LENGTH_SHORT).show();
+            invalidPhone = true;
         }
 
         // create ContentValues object
@@ -183,9 +185,14 @@ public class EditorActivity extends AppCompatActivity implements
             } else {
                 // Otherwise, the insertion was successful and we can display
                 // a toast.
-                Toast.makeText(this, getString(R.string
-                        .editor_update_book_success), Toast.LENGTH_SHORT)
-                        .show();
+                if (invalidPhone) {
+                    Toast.makeText(this, getString(R.string
+                            .editor_null_phone), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string
+                            .editor_update_book_success), Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         } else {
             // this is an existing book
@@ -198,9 +205,14 @@ public class EditorActivity extends AppCompatActivity implements
                         .editor_update_book_failed), Toast.LENGTH_SHORT).show();
             } else {
                 // the update was successful
-                Toast.makeText(this, getString(R.string
-                        .editor_update_book_success), Toast.LENGTH_SHORT)
-                        .show();
+                if (invalidPhone) {
+                    Toast.makeText(this, getString(R.string
+                            .editor_null_phone), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string
+                            .editor_update_book_success), Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         }
 
