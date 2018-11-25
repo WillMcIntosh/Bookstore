@@ -42,14 +42,58 @@
                 android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Quantity category -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+
+        <!-- Label -->
+        <TextView
+            android:text="@string/hint_book_quantity"
+            style="@style/CategoryStyle" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_minus"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/minus"
+                android:textSize="16sp" />
+
             <!-- Quantity field -->
             <EditText
                 android:id="@+id/edit_book_quantity"
-                android:hint="@string/hint_book_quantity"
+                android:text="3"
                 android:inputType="number"
-                style="@style/EditorFieldStyle" />
+                style="@style/EditorFieldStyle"
+                android:layout_marginTop="16dp"
+                android:minEms="3"
+                android:textAlignment="center"/>
+
+            <Button
+                android:id="@+id/button_plus"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="64dp"
+                android:text="@string/plus"
+                android:textSize="16sp" />
         </LinearLayout>
+
     </LinearLayout>
+
 
     <!-- Supplier Overview category -->
     <LinearLayout

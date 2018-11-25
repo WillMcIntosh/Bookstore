@@ -48,7 +48,7 @@
         android:layout_centerVertical="true">
 
         <Button
-            android:id="@+id/button_minus"
+            android:id="@+id/button_sale"
             android:layout_width="120dp"
             android:layout_height="48dp"
             android:text="@string/sale"

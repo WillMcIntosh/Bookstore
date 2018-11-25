@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.willmcintosh.bookstore.data.BookContract;
@@ -63,6 +64,16 @@ public class EditorActivity extends AppCompatActivity implements
      * Button to contact supplier
      */
     private Button mContactButton;
+
+    /**
+     * Button to increment quantity
+     */
+    private Button mIncButton;
+
+    /**
+     * Button to deccrement quantity
+     */
+    private Button mDecButton;
 
     /**
      * Boolean flag to track if entry has been edited
@@ -108,6 +119,8 @@ public class EditorActivity extends AppCompatActivity implements
         mPhoneEditText = findViewById(R.id.edit_supplier_phone);
         // contact button
         mContactButton = findViewById(R.id.order_button);
+        mIncButton = findViewById(R.id.button_plus);
+        mDecButton = findViewById(R.id.button_minus);
 
         // set up OnTouch Listener
         mNameEditText.setOnTouchListener(mTouchListener);
@@ -116,7 +129,7 @@ public class EditorActivity extends AppCompatActivity implements
         mSupplierEditText.setOnTouchListener(mTouchListener);
         mPhoneEditText.setOnTouchListener(mTouchListener);
 
-        // set up Button OnClickListener
+        // set up Phone Button OnClickListener
 
         mContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +141,28 @@ public class EditorActivity extends AppCompatActivity implements
                 } else {
                     Toast.makeText(getBaseContext(), getString(R.string.editor_valid_phone),
                             Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // set up increment OnClickListener
+        mIncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                mQuantityEditText.setText(Integer.toString(quantity + 1), TextView.BufferType
+                        .EDITABLE);
+            }
+        });
+
+        // set up decrement OnClickListener
+        mDecButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                if (quantity > 0) {
+                    mQuantityEditText.setText(Integer.toString(quantity - 1), TextView.BufferType
+                            .EDITABLE);
                 }
             }
         });

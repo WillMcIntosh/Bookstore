@@ -99,4 +99,9 @@
     <!-- Text for order button -->
     <string name="order">Contact Supplier</string>
 
+    <!-- Text for minus button -->
+    <string name="minus">-</string>
+
+    <!-- Text for plus button -->
+    <string name="plus">+</string>
 </resources>

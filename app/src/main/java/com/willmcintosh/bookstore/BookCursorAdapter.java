@@ -76,7 +76,7 @@ public class BookCursorAdapter extends CursorAdapter {
         quantityTextView.setText(String.valueOf(bookQuantity));
 
         // apply listener to sale button
-        Button saleButton = view.findViewById(R.id.button_minus);
+        Button saleButton = view.findViewById(R.id.button_sale);
         final String id = cursor.getString(cursor.getColumnIndex(BookEntry._ID));
 
         saleButton.setOnClickListener(new View.OnClickListener() {
