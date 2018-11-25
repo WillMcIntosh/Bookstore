@@ -24,6 +24,9 @@
     <!-- Text hint for quantity field in the editor [CHAR LIMIT=5] -->
     <string name="hint_book_quantity">Quantity</string>
 
+    <!-- zero text for quantity picker -->
+    <string name="quantity_zero">0</string>
+
     <!-- Label for supplier overview category of attributes in the editor [CHAR LIMIT=30] -->
     <string name="category_supplier">Supplier</string>
 

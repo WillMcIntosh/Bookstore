@@ -78,7 +78,7 @@
             <!-- Quantity field -->
             <EditText
                 android:id="@+id/edit_book_quantity"
-                android:text="3"
+                android:text="@string/quantity_zero"
                 android:inputType="number"
                 style="@style/EditorFieldStyle"
                 android:layout_marginTop="16dp"
