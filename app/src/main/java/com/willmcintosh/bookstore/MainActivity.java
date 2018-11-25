@@ -37,13 +37,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         setContentView(R.layout.activity_main);
 
         // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id
-                .fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EditorActivity
-                        .class);
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,19 +59,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         bookListView.setAdapter(mCursorAdapter);
 
         // set up on click listener
-        bookListView.setOnItemClickListener(new AdapterView
-                .OnItemClickListener() {
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 // create new intent to go to EditorActivity
-                Intent intent = new Intent(MainActivity.this, EditorActivity
-                        .class);
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
 
                 // Form the content URI that represents list item clicked on
-                Uri currentPetUri = ContentUris.withAppendedId(BookEntry
-                        .CONTENT_URI, id);
+                Uri currentPetUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
 
                 // Set URI on the data field of intent
                 intent.setData(currentPetUri);
@@ -117,13 +111,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         if (newUri == null) {
             // If the new content URI is null, then there was an error with
             // insertion.
-            Toast.makeText(this, getString(R.string
-                    .editor_update_book_failed), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.editor_update_book_failed), Toast
+                    .LENGTH_SHORT).show();
         } else {
             // Otherwise, the insertion was successful and we can display a
             // toast.
-            Toast.makeText(this, getString(R.string
-                    .editor_update_book_success), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.editor_update_book_success), Toast
+                    .LENGTH_SHORT).show();
         }
 
     }
@@ -132,10 +126,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
      * Delete all entries from the books table
      */
     private void deleteBooks() {
-        int rowsDeleted = getContentResolver().delete(BookEntry.CONTENT_URI,
-                null, null);
-        Log.v("MainActivity", rowsDeleted + " rows deleted from bookstore " +
-                "database");
+        int rowsDeleted = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
+        Log.v("MainActivity", rowsDeleted + " rows deleted from bookstore " + "database");
     }
 
 
@@ -167,12 +159,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         // Define a projection that specifies the columns of interest
-        String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY};
+        String[] projection = {BookEntry._ID, BookEntry.COLUMN_PRODUCT_NAME, BookEntry
+                .COLUMN_PRICE, BookEntry.COLUMN_QUANTITY};
 
         // execute ContentProvider's query method on a background thread
-        return new CursorLoader(this, BookEntry.CONTENT_URI, projection,
-                null, null, null);
+        return new CursorLoader(this, BookEntry.CONTENT_URI, projection, null, null, null);
     }
 
     @Override

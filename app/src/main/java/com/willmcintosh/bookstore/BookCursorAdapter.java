@@ -37,7 +37,6 @@ public class BookCursorAdapter extends CursorAdapter {
 
     /**
      * Makes a new blank list item view. No data is set (or bound) to the views yet.
-     *
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -56,18 +55,16 @@ public class BookCursorAdapter extends CursorAdapter {
         TextView quantityTextView = view.findViewById(R.id.quantity);
 
         // find columns of book attributes to display
-        int titleColumnIndex = cursor.getColumnIndex(BookEntry
-                .COLUMN_PRODUCT_NAME);
+        int titleColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-        int quantityColumnIndex = cursor.getColumnIndex(BookEntry
-                .COLUMN_QUANTITY);
+        int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
 
         // read book attributes from current book
         String bookTitle = cursor.getString(titleColumnIndex);
         int bookPrice = cursor.getInt(priceColumnIndex);
         // convert book price to currency
         NumberFormat num = NumberFormat.getCurrencyInstance(Locale.US);
-        String priceString = num.format(bookPrice/ 100.00);
+        String priceString = num.format(bookPrice / 100.00);
         final int bookQuantity = cursor.getInt(quantityColumnIndex);
 
         // update textview with attributes from current book
@@ -87,7 +84,7 @@ public class BookCursorAdapter extends CursorAdapter {
                     Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, Long
                             .parseLong(id));
                     ContentValues values = new ContentValues();
-                    values.put(BookEntry.COLUMN_QUANTITY, bookQuantity -1);
+                    values.put(BookEntry.COLUMN_QUANTITY, bookQuantity - 1);
                     context.getContentResolver().update(currentBookUri, values, null, null);
                     swapCursor(cursor);
                 }
