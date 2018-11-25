@@ -88,6 +88,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
 
     }
 
+    // update (decrement) stock value when user clicks sale button
+    private void updateStock(int newStockValue, int rowId) {
+        ContentValues values = new ContentValues();
+        values.put(BookEntry.COLUMN_QUANTITY, newStockValue);
+        String selection = BookEntry._ID + "=?";
+        String[] selectionArgs = new String[]{String.valueOf(rowId)};
+        Uri uri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, rowId);
+        getContentResolver().update(uri, values, selection, selectionArgs);
+    }
 
     /**
      * Insert dummy data to test functionality for part 1

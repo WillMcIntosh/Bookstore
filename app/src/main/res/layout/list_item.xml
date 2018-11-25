@@ -51,7 +51,7 @@
             android:id="@+id/button_minus"
             android:layout_width="120dp"
             android:layout_height="48dp"
-            android:text="Sale"
+            android:text="@string/sale"
             android:textSize="16sp" />
     </LinearLayout>
 

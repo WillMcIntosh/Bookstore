@@ -90,4 +90,7 @@
     book [CHAR LIMIT=20] -->
     <string name="cancel">Cancel</string>
 
+    <!-- Text for sale button -->
+    <string name="sale">Sale</string>
+
 </resources>
