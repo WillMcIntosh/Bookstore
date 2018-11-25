@@ -218,10 +218,10 @@ public class BookProvider extends ContentProvider {
 
         if (values.containsKey(BookEntry.COLUMN_QUANTITY)) {
             // check quantity
-            Integer quantity = values.getAsInteger(BookEntry.COLUMN_PRICE);
+            Integer quantity = values.getAsInteger(BookEntry.COLUMN_QUANTITY);
             if (quantity == null || quantity < 0) {
                 throw new IllegalArgumentException("Book requires a valid " +
-                        "quantity.");
+                        "quantity. " + quantity);
             }
         }
 
