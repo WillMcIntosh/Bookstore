@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         values.put(BookEntry.COLUMN_PRICE, 500);
         values.put(BookEntry.COLUMN_QUANTITY, 4);
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, "Random House");
-        values.put(BookEntry.COLUMN_SUPPLIER_PHONE, "+1-888-555-1234");
+        values.put(BookEntry.COLUMN_SUPPLIER_PHONE, "+1-555-555-1234");
 
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
