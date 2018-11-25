@@ -14,14 +14,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.willmcintosh.bookstore.data.BookContract;
 import com.willmcintosh.bookstore.data.BookContract.BookEntry;
 
 public class EditorActivity extends AppCompatActivity implements
@@ -55,6 +58,11 @@ public class EditorActivity extends AppCompatActivity implements
      * EditText field to enter the supplier's phone
      */
     private EditText mPhoneEditText;
+
+    /**
+     * Button to contact supplier
+     */
+    private Button mContactButton;
 
     /**
      * Boolean flag to track if entry has been edited
@@ -98,6 +106,8 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText = findViewById(R.id.edit_book_quantity);
         mSupplierEditText = findViewById(R.id.edit_supplier_name);
         mPhoneEditText = findViewById(R.id.edit_supplier_phone);
+        // contact button
+        mContactButton = findViewById(R.id.order_button);
 
         // set up OnTouch Listener
         mNameEditText.setOnTouchListener(mTouchListener);
@@ -105,6 +115,22 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mSupplierEditText.setOnTouchListener(mTouchListener);
         mPhoneEditText.setOnTouchListener(mTouchListener);
+
+        // set up Button OnClickListener
+
+        mContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String phoneNumber = PhoneNumberUtils.normalizeNumber(mPhoneEditText.getText().toString().trim());
+                if (BookContract.BookEntry.validPhone(phoneNumber)) {
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getBaseContext(), getString(R.string.editor_valid_phone),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
     }
@@ -121,6 +147,7 @@ public class EditorActivity extends AppCompatActivity implements
         if (!priceString.equals("")) {
             price = Integer.parseInt(priceString);
         }
+
 
         String quantityString = mQuantityEditText.getText().toString().trim();
         int quantity = 0;

@@ -52,6 +52,9 @@
     <!-- Not all fields filled out -->
     <string name="editor_fill_all_fields">Please fill out all fields</string>
 
+    <!-- valid phone warning text -->
+    <string name="editor_valid_phone">Please supply a valid supplier phone number.</string>
+
     <!-- Title text for the empty view, which describes the empty shelf image
     [CHAR LIMIT=50] -->
     <string name="empty_view_title_text">Looks like you have no books...</string>
@@ -92,5 +95,8 @@
 
     <!-- Text for sale button -->
     <string name="sale">Sale</string>
+
+    <!-- Text for order button -->
+    <string name="order">Contact Supplier</string>
 
 </resources>
